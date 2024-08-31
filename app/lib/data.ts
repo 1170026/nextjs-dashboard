@@ -9,6 +9,8 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 
+
+
 export async function fetchRevenue() {
   try {
     // Artificially delay a response for demo purposes.
@@ -17,6 +19,11 @@ export async function fetchRevenue() {
     // console.log('Fetching revenue data...');
     // await new Promise((resolve) => setTimeout(resolve, 3000));
 
+    // sql:SQLクエリの実行
+    // <Revenue>:型指定
+    // `SELECT * FROM revenue`:revenue テーブルから全てのカラムのデータを取得(「テンプレートリテラル」変数や式を埋め込む)
+    // sql<Revenue> が SELECT * FROM revenue という SQL クエリをデータベースに送信
+    // revenue テーブルの全てのデータを検索し、その結果を返す
     const data = await sql<Revenue>`SELECT * FROM revenue`;
 
     // console.log('Data fetch completed after 3 seconds.');
@@ -56,9 +63,9 @@ export async function fetchCardData() {
     const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
     const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
     const invoiceStatusPromise = sql`SELECT
-         SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) AS "paid",
-         SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
-         FROM invoices`;
+          SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) AS "paid",
+          SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
+          FROM invoices`;
 
     const data = await Promise.all([
       invoiceCountPromise,
