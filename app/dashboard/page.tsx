@@ -5,6 +5,7 @@ import RevenueChart from "../ui/dashboard/revenue-chart";
 import { lusitana } from "../ui/fonts";
 
 export default async function Page() {
+    // ウィーターフォールでデータ取得
     const revenue = await fetchRevenue();
     const latestInvoices = await fetchLatestInvoices();
     const {
