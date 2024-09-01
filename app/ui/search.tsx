@@ -2,6 +2,7 @@
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 
 export default function Search({ placeholder }: { placeholder: string }) {
   const searchParams = useSearchParams();// 現在のURLから検索パラメータを取得
@@ -9,10 +10,11 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const { replace } = useRouter();  // ルーターのreplaceメソッドを取得してURLを更新
 
   // inputから取得した文字列をもとにURLの検索パラメータを更新
-  function handleSearch(term: string) {
-
+  // function handleSearch(term: string) {
+  const handleSearch = useDebouncedCallback((term) => {
+    console.log(`Searching...${term}`)
     const params = new URLSearchParams(searchParams);// URLSearchParamsオブジェクトを生成
-    // console.log(term)
+
 
     if (term) { // 検索クエリが入力された場合、queryパラメータを設定
       params.set('query', term);
@@ -22,7 +24,9 @@ export default function Search({ placeholder }: { placeholder: string }) {
     // 現在のパスと新しい検索パラメータでURLを置き換える
     replace(`${pathname}?${params.toString()}`);
     //${}:中に変数や式を入れ、その値が文字列に埋め込み
-  }
+  }, 300 //入力更新を3秒停止
+  )
+
   return (
     <div className="relative flex flex-1 flex-shrink-0">
       <label htmlFor="search" className="sr-only">
@@ -40,3 +44,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
     </div>
   );
 }
+function useDeboundedCallback(arg0: (term: any) => void, arg1: number) {
+  throw new Error('Function not implemented.');
+}
+
