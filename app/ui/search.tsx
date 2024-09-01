@@ -14,7 +14,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const handleSearch = useDebouncedCallback((term) => {
     console.log(`Searching...${term}`)
     const params = new URLSearchParams(searchParams);// URLSearchParamsオブジェクトを生成
-
+    params.set("page","1")
 
     if (term) { // 検索クエリが入力された場合、queryパラメータを設定
       params.set('query', term);
@@ -33,7 +33,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
         Search
       </label>
       <input
-        className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+        className="peer block w-full rhttps://nextjs.org/learn/dashboard-app/mutating-dataounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
         placeholder={placeholder}
         onChange={(e) => {
           handleSearch(e.target.value)
