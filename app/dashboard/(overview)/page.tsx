@@ -1,12 +1,13 @@
-import { fetchCardData, fetchLatestInvoices, fetchRevenue } from "../../lib/data";
+import { RevenueChartSkeleton } from "@/app/ui/skeletons";
+import { fetchCardData, fetchLatestInvoices } from "../../lib/data";
 import { Card } from "../../ui/dashboard/cards";
-import LatestInvoices from "../../ui/dashboard/latest-invoices";
-import RevenueChart from "../../ui/dashboard/revenue-chart";
 import { lusitana } from "../../ui/fonts";
+import { Suspense } from "react";
+import RevenueChart from "@/app/ui/dashboard/revenue-chart";
 
 export default async function Page() {
     // ウィーターフォールでデータ取得
-    const revenue = await fetchRevenue();
+    // const revenue = await fetchRevenue();
     const latestInvoices = await fetchLatestInvoices();
     const {
         numberOfCustomers,
@@ -26,8 +27,11 @@ export default async function Page() {
                 <Card title="Total Customers" value={numberOfCustomers} type="customers" />
             </div>
             <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-                <RevenueChart revenue={revenue}  />
-                <LatestInvoices latestInvoices={latestInvoices} />
+                {/* <RevenueChart revenue={revenue}  /> */}
+                {/* <LatestInvoices latestInvoices={latestInvoices} /> */}
+                <Suspense fallback={<RevenueChartSkeleton />} >
+                    <RevenueChart />
+                </Suspense>
             </div>
         </main>
     );
