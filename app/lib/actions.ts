@@ -71,6 +71,7 @@ export async function UpdateInvoice(id: string, formData: FormData) {
     redirect('/dashboard/invoices');//検索後にリダイレクト
 }
 export async function deleteInvoice(id: string) {
+    // throw new Error('Failed to Delete Invoice');//開発用エラー出力
     try {
         await sql`DELETE FROM invoices WHERE id = ${id}`;
         revalidatePath('/dashboard/invoices');
