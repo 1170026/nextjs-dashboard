@@ -8,12 +8,15 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export type State = {
+  customerId: string; // 顧客IDを格納する文字列型に修正
+  amount: number; // 請求書の金額
+  status: "pending" | "paid"; // 状態は "pending" か "paid"
+  message?: string | null; // メッセージ
   errors?: {
     customerId?: string[];
     amount?: string[];
     status?: string[];
   };
-  message?: string | null;
 };
 
 const FormSchema = z.object({

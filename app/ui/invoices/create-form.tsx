@@ -9,15 +9,54 @@ import {
 } from "@heroicons/react/24/outline";
 import { Button } from "@/app/ui/button";
 import { createInvoice, State } from "@/app/lib/actions";
-import { useActionState } from "react";
+import { useState } from "react";
+
+// useFormState フック
+function useFormState(initialState: State) {
+  const [formState, setFormState] = useState<State>(initialState);
+
+  // 状態を更新する関数
+  const updateFormState = (
+    field: keyof State,
+    value: string | number | boolean
+  ) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      [field]: value,
+    }));
+  };
+
+  return [formState, updateFormState] as const; // 型推論を支援するため、as constを使う
+}
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
-  const initialState: State = { message: null, errors: {} };
+  const initialState: State = {
+    customerId: "", // customerId を関数ではなく string として定義
+    amount: 0, // amount フィールドも追加（初期値は 0）
+    status: "pending", // 初期状態を設定
+    message: null,
+    errors: {},
+  };
   // ReactComponent useActionState: useActionState(action,{})#引数：実行する関数、初期値
-  const [state, formAction] = useActionState(createInvoice, initialState);
+  const [formState, updateFormState] = useFormState(initialState);
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("customerId", formState.customerId);
+    formData.append("amount", formState.amount.toString());
+    formData.append("status", formState.status);
+
+    try {
+      const response = await createInvoice(formState, formData); // formState と formData を渡す
+      // 成功時の処理
+    } catch (error) {
+      console.error("Form submission failed:", error);
+    }
+  };
   return (
     // <form action={createInvoice}>
-    <form action={formAction}>
+    <form onSubmit={handleSubmit}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
